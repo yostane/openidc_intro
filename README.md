@@ -1,5 +1,15 @@
 # Open ID Connect
 
+- [Open ID Connect](#open-id-connect)
+  - [Introduction](#introduction)
+  - [Typical use case (Authorization Grant Flow)](#typical-use-case-authorization-grant-flow)
+  - [The authorization code and tokens](#the-authorization-code-and-tokens)
+  - [Adding OIDC authentication to your app](#adding-oidc-authentication-to-your-app)
+  - [Create your own OP](#create-your-own-op)
+  - [Links](#links)
+
+![Logo](./assets/openid-logo-wordmark.png)
+
 When we develop web or mobile or apps, we may deal with the authentication of the users. Handling authentication on our own backend can prove complicated and risky because we are responsible of handling sensible data. Hopefully, there is a way to delegate authentication to an authentication server and is called OpenID Connect. This On top of that, it is a standard protocol that is well suited for mobile apps and web apps. This post serves as a modest introduction to this standard.
 
 ## Introduction
@@ -56,7 +66,20 @@ At any time does the RP know about the end-user credentials. Instead, it gets an
 
 The authorization code's only purpose is to exchange it with an access token and an ID token. It is used in the _Authorization Code Flow_ and other OIDC flows may skip it and directly return an the tokens.
 
-## Sample Android app
+## Adding OIDC authentication to your app
+
+When we say that client app supports OIDC, it means that the app is a RP that can retrieve the different tokens. The token may be used to get user information or request other APIs as long as they support the access token as an input.
+
+Thanks to the popularity of OIDC, we can fairly find SDKs that abstract many aspects for implementing an RP. For example, the AppAuth SDK for iOS and Android provides a simple interface for requesting endpoints and persisting authentication information. It also handles all interaction with the OP for us.
+
+Here are some SDKs for impleting an OIDC client or RP:
+
+- iOS and macOS: [AppAuth for iOS and macOS](https://github.com/openid/AppAuth-iOS)
+- Android: [AppAuth for Android](https://github.com/openid/AppAuth-Android)
+- Javascript: [AppAuth for JS]()
+- Angular: [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
+
+## Create your own OP
 
 ## Links
 
