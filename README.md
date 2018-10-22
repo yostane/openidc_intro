@@ -87,3 +87,8 @@ Here are some SDKs for impleting an OIDC client or RP:
 - [List of public OpenID Connect providers](https://connect2id.com/products/nimbus-oauth-openid-connect-sdk/openid-connect-providers)
 - [OpenID Connect (Authorization Code Flow) with Red Hat SSO](https://medium.com/@robert.broeckelmann/openid-connect-authorization-code-flow-with-red-hat-sso-d141dde4ed3f)
 - [Execute an Authorization Code Grant Flow](https://auth0.com/docs/api-auth/tutorials/authorization-code-grant)
+- [Trying out OAuth2 via CURL](https://labs.cx.sap.com/2012/06/18/trying-out-oauth2-via-curl/)
+- [Curl output to display in the readable JSON format in UNIX shell script](https://stackoverflow.com/questions/27238411/curl-output-to-display-in-the-readable-json-format-in-unix-shell-script)
+- [Assigning the output of a command to a variable](https://stackoverflow.com/questions/20688552/assigning-the-output-of-a-command-to-a-variable)
+- [How to parse JSON string via command line on Linux](http://xmodulo.com/how-to-parse-json-string-via-command-line-on-linux.html)
+- [pyjwt](https://pyjwt.readthedocs.io/en/latest/)
