@@ -124,3 +124,4 @@ Here are some SDKs that help us implement an OIDC client or RP:
 - [Assigning the output of a command to a variable](https://stackoverflow.com/questions/20688552/assigning-the-output-of-a-command-to-a-variable)
 - [How to parse JSON string via command line on Linux](http://xmodulo.com/how-to-parse-json-string-via-command-line-on-linux.html)
 - [pyjwt](https://pyjwt.readthedocs.io/en/latest/)
+- [Identity, Claims, & Tokens – An OpenID Connect Primer, Part 1 of 3](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1)
