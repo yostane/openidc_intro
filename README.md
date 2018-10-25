@@ -1,4 +1,4 @@
-# Open ID Connect
+# Open ID Connect for the complete beginner
 
 - [Open ID Connect](#open-id-connect)
   - [Introduction](#introduction)
@@ -64,15 +64,23 @@ At any time does the RP know about the end-user credentials. Instead, it gets an
 
 ## The authorization code and tokens
 
-**The authorization code** is a string that is returned upon successful authorization by the end user. Its only purpose is to exchange it with an access token and an ID token. The **The authorization code** is mostly used _Authorization Code Flow_, as its name implies. Other OIDC flows may skip it entirely and directly return the different tokens which we will explain next.
+In OIDC, an authorization code and three types of tokens can be obtained upon successful authentication: **The authorization code**, 
+
+### The authorization code
+
+It is a string that is returned upon successful authorization by the end user. Its only purpose is to exchange it with an access token and an ID token. The **The authorization code** is mostly used _Authorization Code Flow_, as its name implies. Other OIDC flows may skip it entirely and directly return the different tokens which we will explain next.
 
 The token in OIDC are **the access token**, the **ID token** and the **refresh token**. These token are encoded strings that serve a specific purpose.
 
 The **access token** is the information that allows to query other OIDC endpoints, such as the userInfo endpoint. It also allows to access other protected APIs from the RP. For example, [google allows to use the access token](https://developers.google.com/identity/protocols/OAuth2) to query protected its APIS. The access token is not OIDC specific but emanates from OAuth2 with respect to what I explaied above: _(Identity, Authentication) + OAuth 2.0 = OpenID Connect_.
 
-The refresh token is optional
+The refresh token is used to obtain a new ID token or access token when. This avoids repeating the authentication step. However, the resfresh token may cause dangerous security breaches and must be manipulated with caution. It is strongly recommended to ditch refresh tokens in web apps or mobile apps because. It can be used although when the RP is a web server because it is much more difficult to attack.
 
-The **ID token** is a [JSON Web Token (JWT)](https://jwt.io/), when decoded, is a JSON file that has information about the end-user and about the authentication itself. Each field of the ID token is called a **Claim**. OIDC defines standard claims and it's possible to provide custom ones. Here is a sample ID token:
+The **ID token** is a [JSON Web Token (JWT)](https://jwt.io/), when decoded, is a JSON file that has information about the end-user and about the authentication itself. 
+
+## The ID token
+
+Each field of the ID token is called a **Claim**. OIDC defines standard claims and it's possible to provide custom ones. Here is a sample ID token:
 
 ```
 eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJCcGFDMXItMVFRSEdJbVV5SnQ1dlJGMHYtbGlvbjROblkyaEREY1hUMUtzIn0.eyJqdGkiOiIxNTE1OWI1OC1hMjQxLTQ4YWQtYmNjMS1hYmQwMTUyZDk5YTIiLCJleHAiOjE1NDAyNDQwMTcsIm5iZiI6MCwiaWF0IjoxNTQwMjQzNzE3LCJpc3MiOiJodHRwczovL3Nzby1vaWRjLXRlc3QuMWQzNS5zdGFydGVyLXVzLWVhc3QtMS5vcGVuc2hpZnRhcHBzLmNvbS9hdXRoL3JlYWxtcy9kZW1vIiwiYXVkIjoiY2xvaWRjIiwic3ViIjoiNmIzNWI5ZjMtMzQ3YS00MDhhLWFmMWUtYTdiMDU3M2ZlZTQ4IiwidHlwIjoiSUQiLCJhenAiOiJjbG9pZGMiLCJhdXRoX3RpbWUiOjAsInNlc3Npb25fc3RhdGUiOiJhOTNkNDBjNS0zMTliLTQxMjQtYTQxYS0xMjYyZjU5NWNlMGIiLCJhY3IiOiIxIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidHV0dSJ9.UNQeHa69iVy_BbHRH0lydZ83PDYNN1QzxbozWFObhyJIJ8WJzvbMomYHL2To_5zOJ79fNXcVHWIosfbEyz3RrKJ0SvBfrr6Q9gIQnZYWp91_Ky_TRIt5p2lhumAVSPeZSxgWYCUt9nQgGu_4FAaUcH_xS_499x4yu5cA82gWQUYLw6wrIF-PLwAsAwfibdIV8-3lByA4X9tksuFOEtqzr96FLbNnZ6zldytwJffOYsBRT7efbfKAKgeboT9V1y6Wtf95EsUQkhzRmnaWs-u07xi9IryassoeNMOnaMw0LGvImkcPyqQvcnxtLE4eL4OkWIi7MYqYkIW-kW0YdZrKFw
