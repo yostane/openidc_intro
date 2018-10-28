@@ -1,12 +1,24 @@
 # Open ID Connect and OAuth 2 and for the complete beginner
 
-- [Open ID Connect](#open-id-connect)
-  - [Introduction](#introduction)
-  - [Typical use case (Authorization Grant Flow)](#typical-use-case-authorization-grant-flow)
-  - [The authorization code and tokens](#the-authorization-code-and-tokens)
-  - [Adding OIDC authentication to your app](#adding-oidc-authentication-to-your-app)
-  - [Creating an OP with OpenShift](#creating-an-op-with-openshift)
-  - [Links](#links)
+<!-- TOC -->
+
+- [Open ID Connect and OAuth 2 and for the complete beginner](#open-id-connect-and-oauth-2-and-for-the-complete-beginner)
+    - [Introduction](#introduction)
+    - [Typical use case (Authorization Grant Flow)](#typical-use-case-authorization-grant-flow)
+    - [The authorization code and tokens](#the-authorization-code-and-tokens)
+        - [The authorization code](#the-authorization-code)
+        - [The access token](#the-access-token)
+        - [The refresh](#the-refresh)
+        - [The ID token](#the-id-token)
+    - [What about OAuth 2](#what-about-oauth-2)
+    - [Implementing an OIDC RP and OP](#implementing-an-oidc-rp-and-op)
+        - [Adding OIDC authentication to your app](#adding-oidc-authentication-to-your-app)
+        - [Creating an OP with OpenShift](#creating-an-op-with-openshift)
+    - [Quick note on security](#quick-note-on-security)
+    - [Conclusion](#conclusion)
+    - [Links](#links)
+
+<!-- /TOC -->
 
 ![Logo](assets/openid-logo-wordmark.png)
 
@@ -140,22 +152,50 @@ The following table tries to give an equivalence between OAuth 2 and OIDC terms:
 
 OIDC does not add anything specific about the resource server, this may explain why there is no equivalent for this term in OIDC.
 
-## Adding OIDC authentication to your app
+## Implementing an OIDC RP and OP
 
-An application that supports OIDC is considered a RP in the OIDC terminology. It is able to interact with the _authorizes_ and _token_ endpoints that allow retrieve the different tokens. The _access token_ may be used to get user information through the user or request other APIs as long as they support the access token as an input.
+The next two sections provide tips and guidances that allow you to implement a RP and an AS. In the following a RP will be called a client or an OIDC client.
 
-Thanks to the popularity of OIDC, we can fairly find SDKs that abstract many aspects for implementing an RP. For example, the AppAuth SDK for iOS and Android provides a simple interface for requesting endpoints and persisting authentication information. It also handles all interaction with the OP for us.
+Depending on your need and use case, you may implement an OIDC client or OP or both.
+
+[The official OIDC website lists certified libraries](https://openid.net/developers/certified/) for both the client and the server.
+
+The following paragraph gives a brief explanation of OIDC clients.
+
+### Adding OIDC authentication to your app
+
+An OIDC client is able to communicate with an OP. Particularly, it is able to request the _authorizes_ and _token_ endpoints that allow retrieve the different tokens. The _access token_ may be used to get user information through the user or request other APIs as long as they support the access token as an input.
+
+In terms of security and implementation, there are two great families of OIDC clients:
+
+- Server apps and traditional web apps(or server web apps): server side are globally closed to the outside world and offer none or a few entry points through APIs for example. The authorization grant type with client secret and the password grant type are allowed for this kind of clients.
+- Single page apps, desktop apps and mobile apps: these apps mainly execute on the client side. Thus, exchanging secret informations is forbidden in this case. The only two recommended grant types are the authorization grant without user secret and the implicit grand. For example, the AppAuth SDK for Android supports only the authorization grant without user secret.
+
+Note: _There are security aspects that must be considered, but they are outside the scope of this humble introduction_
+
+Hopefully, thanks to the popularity of OIDC, we can fairly easily find SDKs and tutorials that help us implement an OIDC client. For example, the AppAuth SDK for iOS and Android provides a simple interface for requesting endpoints and persisting authentication information. It also handles all interaction with the OP for us.
 
 Here are some SDKs that help us implement an OIDC client or RP:
 
-- iOS and macOS: [AppAuth for iOS and macOS](https://github.com/openid/AppAuth-iOS)
-- Android: [AppAuth for Android](https://github.com/openid/AppAuth-Android)
-- Javascript: [AppAuth for JS](https://github.com/openid/AppAuth-JS)
-- Angular: [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
+- Server apps and traditional web apps(or server web apps):
+  - PHP: [PHP OpenID Connect Basic Client](https://github.com/jumbojett/OpenID-Connect-PHP)
+  - Node: [Node openid-client](https://www.npmjs.com/package/openid-client)
+  - JEE + Spring: [OAuth 2.0 Login Sample](https://github.com/spring-projects/spring-security/tree/5.0.0.RELEASE/samples/boot/oauth2login)
+- Single page apps, desktop apps and mobile apps:
+  - iOS and macOS: [AppAuth for iOS and macOS](https://github.com/openid/AppAuth-iOS)
+  - Android: [AppAuth for Android](https://github.com/openid/AppAuth-Android)
+  - Javascript: [AppAuth for JS](https://github.com/openid/AppAuth-JS)
+  - Angular: [angular-auth-oidc-client](https://github.com/damienbod/angular-auth-oidc-client)
 
-## Creating an OP with OpenShift
+Many more libraries and code sample are available. I have also developed bash scripts that play with OIDC using curl [here](set_vars_template.sh), [here](password_req.sh) and [here](code_to_token_req.sh).
 
-## Conclustion
+The next section shows how to create an OpenID connect Provider with OpenShift.
+
+### Creating an OP with OpenShift
+
+## Quick note on security
+
+## Conclusion
 
 ## Links
 
