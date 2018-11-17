@@ -108,11 +108,11 @@ The **access token** is the information that allows to query other OIDC endpoint
 
 ### The refresh token
 
-The refresh token is used to obtain a new ID token or access token when. This avoids repeating the authentication step. However, the refresh token may cause dangerous security breaches and must be manipulated with caution. It is strongly recommended to ditch refresh tokens in web apps or mobile apps because. It can be used although when the RP is a web server because it is much more difficult to attack.
+The refresh token is used to obtain a new ID token or access token when. This avoids repeating the authentication step. However, the refresh token may cause dangerous security breaches and must be manipulated with caution. It is strongly recommended to ditch refresh tokens in web apps or mobile apps because it can easily recreate the other tokens. Although, it can be used when the RP is an isolated web server because it is much more difficult to attack. Thus, it is useful in a server page app (such as PHP, ASP), where the tokens reside on the server.
 
 ### The ID token
 
-The **ID token** is a [JSON Web Token (JWT)](https://jwt.io/), when decoded, is a JSON file that has information about the end-user and about the authentication itself.
+The **ID token** is a [JSON Web Token (JWT)](https://jwt.io/) that, when decoded, shows a JSON file that has information about the end-user and about the authentication itself.
 
 Each field of the ID token is called a **Claim**. OIDC defines standard claims and it's possible to provide custom ones. Here is a sample ID token:
 
@@ -140,24 +140,26 @@ Since it a JWT, it can be decoded using [jwt.io](https://jwt.io/), or the [pyjwt
 }
 ```
 
-The next section shows how to implement add OIDC support to an application.
+The **UserInfo** endpoint has more claims than the **ID token**. Thus, it is not necessary to call the userInfo endpoint unless we want a claim not provided by the ID token.
+
+We may not notice, but at this point, many OAuth2 concepts were also covered. The next section highlights OAuth 2 specificities.
 
 ## What about OAuth 2
 
-OAuth 2 is an industry standard for authorization. It explains a standard way in which third party apps can access protected resources on behalf of the resource owner. This is also called delegation of authorization.
+OAuth 2 is an industry standard for authorization. It explains a standard way in which apps can request access to protected resources from a 3rd party on behalf of the resource owner. This is also called delegation of authorization.
 
-The main difference between OAuth 2 and OIDC is that the former provides authorization (is the user can access a resource) while the latter provides authentication (who is the user). Thus, OAuth 2 defines the _access token_ and the _refresh token_ but does define the _id token_ and the _userinfo_ endpoint.
+OIDC is layer on top OAuth2. The main difference between OAuth 2 and OIDC is that the former provides authorization (is the user can access a resource) while the latter provides authentication (who is the user). Thus, OAuth 2 defines the _access token_ and the _refresh token_ while OIDC adds the _ID token_ and the _userinfo_ endpoint.
 
-Since OAuth 2 was there before OIDC, OAuth 2 implementations can provide identification information through OAuth 2 without OIDC _in a non standard way_. For example, [Facebook login](https://developers.facebook.com/docs/facebook-login/overview) relies on OAuth 2 but still provides some identification information.
+Nowadays, we may find OAuth2 implementations that do not support OIDC and do not provide the **ID token**. These implementations can provide identification information through OAuth 2 without OIDC _in a non standard way_. For example, [Facebook login](https://developers.facebook.com/docs/facebook-login/overview) relies on OAuth2 but still provides some identification information.
 
-In addition to the ID token, OIDC standardizes other elements that were not standardized by OAuth2 (scopes, endpoint discovery, and dynamic registration of clients).
+In addition to the **ID token**, OIDC standardizes other elements that were not standardized by OAuth2 (scopes, endpoint discovery, and dynamic registration of clients).
 
-In terms of terminology, OAuth 2 introduces different terms listed below:
+In terms of terminology, OAuth2 has a different vocabulary than OIDC. This may be annoying some times but is not insurmountable. Here are some of them:
 
-- Authorization Server: the server that provides authorization (the access token mainly) and implements the OAuth 2 protocol
-- Resource owner: the registered user that has protected resources
-- The client application: the application that requests authorization and protected resources on behalf of the resource owner
-- Resource server: the server that provides protected resources in exchange with an access token. It can either be merged with the authorization server or a totally separate entity (such as a REST API provided by the Client application developer)
+- **Authorization Server**: the server that provides authorization (the access token mainly) and implements the OAuth 2 protocol
+- **Resource owner**: the registered user that has protected resources
+- **The client application**: the application that requests authorization and protected resources on behalf of the resource owner
+- **Resource server**: the server that provides protected resources in exchange with an access token. It can either be merged with the authorization server or a totally separate entity (such as a REST API provided by the Client application developer)
 
 The following table tries to give an equivalence between OAuth 2 and OIDC terms:
 
@@ -168,7 +170,7 @@ The following table tries to give an equivalence between OAuth 2 and OIDC terms:
 | Authorization Server (OIDC not implied) | OpenID Connect Provider |
 |             Resource server             |                         |
 
-OIDC does not add anything specific about the resource server, this may explain why there is no equivalent for this term in OIDC.
+OIDC does not have a vocabulary related to the resource server because it focuses on identification side.
 
 ## Implementing an OIDC RP and OP
 
