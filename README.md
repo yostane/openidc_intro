@@ -3,30 +3,30 @@
 <!-- TOC -->
 
 - [Open ID Connect and OAuth 2 and for the complete beginner](#open-id-connect-and-oauth-2-and-for-the-complete-beginner)
-    - [Introduction](#introduction)
-    - [Typical use case (Authorization Grant Flow)](#typical-use-case-authorization-grant-flow)
-    - [The authorization code and tokens](#the-authorization-code-and-tokens)
-        - [The authorization code](#the-authorization-code)
-        - [The access token](#the-access-token)
-        - [The refresh](#the-refresh)
-        - [The ID token](#the-id-token)
-    - [What about OAuth 2](#what-about-oauth-2)
-    - [Implementing an OIDC RP and OP](#implementing-an-oidc-rp-and-op)
-        - [Adding OIDC authentication to your app](#adding-oidc-authentication-to-your-app)
-        - [Creating an OP with OpenShift](#creating-an-op-with-openshift)
-    - [Quick note on security](#quick-note-on-security)
-    - [Conclusion](#conclusion)
-    - [Links](#links)
+  - [Introduction](#introduction)
+  - [Typical use case (Authorization Grant Flow)](#typical-use-case-authorization-grant-flow)
+  - [The authorization code and tokens](#the-authorization-code-and-tokens)
+    - [The authorization code](#the-authorization-code)
+    - [The access token](#the-access-token)
+    - [The refresh](#the-refresh)
+    - [The ID token](#the-id-token)
+  - [What about OAuth 2](#what-about-oauth-2)
+  - [Implementing an OIDC RP and OP](#implementing-an-oidc-rp-and-op)
+    - [Adding OIDC authentication to your app](#adding-oidc-authentication-to-your-app)
+    - [Creating an OP with OpenShift](#creating-an-op-with-openshift)
+  - [Quick note on security](#quick-note-on-security)
+  - [Conclusion](#conclusion)
+  - [Links](#links)
 
 <!-- /TOC -->
 
 ![Logo](assets/openid-logo-wordmark.png)
 
-When we develop web or mobile or apps, we may deal with the authentication of the users. Handling authentication on our own backend adds a lot of responsibility because we are responsible of handling sensible data. Hopefully, there is a way to delegate authentication and authorization to 3rd parties thanks to OpenID Connect. It is a standard protocol that is well suited for mobile apps and web apps. It is also based on another standard called OAuth 2. This post serves as a modest introduction to these standards with a strong focus on OpenID Connect.
+Handling user authentication is common yet critical task in many apps. A frequent solution is to store the credentials in a database in a server that we own. This implies an important responsibility because there is sensible data in our servers. Another solution is to delegate authentication and authorization to a 3rd party that we communicate with using a well defined protocol. Such standards exists such as OpenID Connect and OAuth2. It is a standard protocol that. This post serves as a modest introduction to these standards with a strong focus on OpenID Connect.
 
 ## Introduction
 
-OpenID Connect, abbreviated OIDC, is a standard that allows to a program, application or website to identify a user thanks to an authentication server. It also allows to get basic authentication information.
+OpenID Connect, abbreviated OIDC, is a standard that allows a program, an application or a website to identify a user thanks to a authentication server which can be hosted by a different developer or organization. This standard also allows to get basic authentication information.
 
 OIDC does not define new protocols for every aspect of the identification. Instead, it relies on OAuth 2, which is a framework that defines how a user can get access to resources, and adds a layer that allows to identify the user and a to provide basic information about him.
 
@@ -34,34 +34,50 @@ OIDC does not define new protocols for every aspect of the identification. Inste
 
 Since some OIDC and OAuth 2 terms are different, the following sections use OIDC terms. I will try to indicate the differences between OIDC and OAuth 2 when possible. Rest assured anyway, there will be a section dedicated to OAuth 2.
 
-The next section explains a typical OIDC scenario.
+What a transition,
+
+## Some OIDC Terminology
+
+Here is some OIDC terminology that will be useful for later:
+
+- **Relying party or RP**: is the app that delegates authentication to a 3rd party using the OIDC protocol.
+- **OpenID provider or OP**: is the 3rd party that provides authentication to a RP. Such OP are Google and Yahoo.
+- **End-user**: is the user that uses the app and enters his credentials to the OP when requested.
+
+The next paragraphs explains a typical OIDC scenario.
 
 ## Typical use case (Authorization Grant Flow)
 
-In this section, we give a typical use case for OIDC where we want to develop a mobile app that only retrieves user information and does communicate with its backend.
+In this section, we give a typical scenario that shows how OIDC works.
 
-Suppose we want to develop a mobile app that allows its end-users to log-in using an OIDC provider (abbreviated OP) and shows basic user information retrieved from that OP. In OIDC terminology, the mobile-app is considered an OIDC client and is called Relying Party or RP. This use case flows as follows:
+Our use case consists of a mobile app that shows some profile information of the authenticated user. The authentication is delegated to an OP that sends-back a **code** to the mobile app in case of success. This scenario is called **Authorization Grant Flow**.
 
-1. The RP requests the OP to authenticate the user
-2. The OP shows a web view that asks the end-user to enter his credentials and validate the fact that he is going to provide authentication information to the RP
-3. The OP validates back to the RP with an authorization code that gets exchanged with an Access Token and an ID Token. The RP notifies the end-user that the connexion is successful
-4. The RP can request some user info from the RP using the access token
+This use case flows as follows:
 
-This type of flow is called _Authorization Code Flow_, and OIDC defines 2 other flows which as the _Implicit flow_ and _Hybrid flow_. This humble introduction focuses mainly on the _Authorization Code Flow_.
+1. The end-user opens the app and taps the **log-in** button
+1. The app (which is a RP in the context of OIDC) requests the OP to authenticate the end-user using an authorization request. This request contains different parameters including a **redirection URL** that is important for later use
+1. The OP shows a web-view that asks the end-user to enter his credentials. The RP does not have access to the web-view content
+1. The end-user enters his credentials and goes through the different authentication steps. Those steps depend on the OP implementation
+1. When the authentication finishes, the OP notifies the RP thanks to the **redirection URL**. In case of success, this URL contains an authorization code
+1. The RP exchanges the authorization code with an **Access Token** and an **ID Token**.
+1. The RP notifies the end-user that the connexion is successful and shows basic user information available in the **ID token**
+
+This type of flow is called _Authorization Code Flow_ because the OP sends an authorization code to the RP during the redirection. OIDC (and also OAuth2) has other flows such as the _Implicit flow_ and _Hybrid flow_. This humble introduction focuses mainly on the _Authorization Code Flow_.
 
 During the _Authorization Code Flow_, the RP sends these requests to the OP:
 
-- The authorization request which that allows the OP to authenticate the end-user. Its result is an authorization code
-- The token request that exchanges the authorization code for an access token, ID token and optionally a refresh token
-- The user info request that takes the access token as input and returns information about the user
+- **The authorization request** which that allows the OP to authenticate the end-user. Its result is an authorization code (AC) sent through the redirection URL
+- **The token request** that exchanges the authorization code for an access token, ID token and optionally a refresh token
 
-Each of these requests is called an endpoint. OIDC defines standard endpoints that every OP must provide. Every OP exposes its endpoints in the discovery url which is also part of the OIDC standard. It is a JSON file that contains the different endpoints as well as other information. The discovery allows a RP to dynamically obtain the relevant information about an OP. Here are some discovery urls that you can check right now:
+Each of these requests is called an endpoint. OIDC (and also OAuth 2) defines standard endpoints that every OP must provide. Every OP exposes its endpoints in a specific page which is also part of the OIDC standard. It is a JSON file that contains the different endpoints as well as other information. The url of this page is called **the discovery url**. The discovery allows a RP to dynamically obtain the relevant information about an OP such as the urls of **the authorization request** and **the token request** . In OIDC terminology, these urls are called **endpoints**
+
+Here are some discovery urls that you can check right now:
 
 - [Google](https://accounts.google.com/.well-known/openid-configuration)
 - [Microsoft](https://login.microsoftonline.com/fabrikamb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration)
 - [Yahoo](https://login.yahoo.com/.well-known/openid-configuration)
 
-Here is a snippet of the [Yahoo OIDC discovery](https://login.yahoo.com/.well-known/openid-configuration), where you can see the endpoints explained above:
+A snippet of the [Yahoo OIDC discovery](https://login.yahoo.com/.well-known/openid-configuration) showing some endpoints is available below:
 
 ```javascript
 {
@@ -74,21 +90,23 @@ Here is a snippet of the [Yahoo OIDC discovery](https://login.yahoo.com/.well-kn
 }
 ```
 
-At any time does the RP know about the end-user credentials. Instead, it gets an an authorization code and after that an access token and an ID Token. These are explained in the next section.
+I want to highlight a very important point. _Never does the RP know about the end-user credentials_. Instead, it gets an an authorization code (abbreviated AC) which is exchanged with access token and an ID Token.
+
+The different tokens and the AC are explained in the next section.
 
 ## The authorization code and tokens
 
-In OIDC, an authorization code and three types of tokens can be obtained upon successful authentication: **The authorization code**, the **access token**, the **refresh token** and the **ID token**. The first three ones come from OAuth2 while the latter is an addition of OIDC.
+In OIDC (and OAuth 2), different information may be sent by the OP to the RP: **The authorization code**, the **access token**, the **refresh token** and the **ID token**. The first three ones come from OAuth2 while the latter is an addition of OIDC.
 
 ### The authorization code
 
-It is a string that is returned upon successful authorization by the end user. Its only purpose is to exchange it with an access token and an ID token. The **The authorization code** is mostly used _Authorization Code Flow_, as its name implies. Other OIDC flows may skip it entirely and directly return the different tokens which we will explain next.
+It is a string that is returned upon successful authorization by the end user. Its only purpose is to exchange it with an access token and an ID token. The **The authorization code** is mostly used _Authorization Code Flow_, as its name implies. Other OIDC flows may skip it entirely. Instead, they return the different tokens which we will explain next.
 
 ### The access token
 
-The **access token** is the information that allows to query other OIDC endpoints, such as the userInfo endpoint. It also allows to access other protected APIs from the RP. For example, [google allows to use the access token](https://developers.google.com/identity/protocols/OAuth2) to query protected its APIS. The access token is not OIDC specific but emanates from OAuth2 with respect to what I explaied above: _(Identity, Authentication) + OAuth 2.0 = OpenID Connect_.
+The **access token** is the information that allows to query other OIDC endpoints, such as the userInfo endpoint. It also allows to access other protected APIs from the RP. For example, [google allows to use the access token](https://developers.google.com/identity/protocols/OAuth2) to query its protected APIS. The access token is not OIDC specific but emanates from OAuth2 with respect to what I explaied above: _(Identity, Authentication) + OAuth 2.0 = OpenID Connect_.
 
-### The refresh
+### The refresh token
 
 The refresh token is used to obtain a new ID token or access token when. This avoids repeating the authentication step. However, the refresh token may cause dangerous security breaches and must be manipulated with caution. It is strongly recommended to ditch refresh tokens in web apps or mobile apps because. It can be used although when the RP is a web server because it is much more difficult to attack.
 
