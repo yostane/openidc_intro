@@ -200,11 +200,12 @@ Up until now, we have put aside the communication with any protected Rest API. T
 
 Basically, a protected API requires some kind of authorization process before allowing the user to access the resource. This can be achieved in different ways, for example by sending credentials or a specific token in the request parameters. The server then checks the validity of authorization information and replies to the client back by either a success response or by an access denied response.
 
-In OAuth2/OIDC, the authorization information is the **access token**.
+In OAuth2/OIDC, the authorization information is the **access token**. The following figure illustrated calling a protected API using the access token.
 
 ![Calling protected API](./assets/oauth_ressource_server.jpg)
 
-One thin
+1. The client application authenticated the user with either OAuth2 or OIDC protocols using one of the available flows (for example the authorization grant flow that we have seen earlier)
+2. The client application sends a request to a protected API by adding the
 
 ## Implementing an OIDC RP and OP
 
