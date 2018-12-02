@@ -15,7 +15,7 @@
   _ [The refresh token](#the-refresh-token)
   _ [The ID token](#the-id-token)
   _ [OAuth2](#oauth2)
-  _ [OIDC is based on OAuth2](#oidc-is-based-on-oauth2)
+  _ [OIDC and OAuth2](#oidc-and-oauth2)
   _ [Calling a protected API using OAuth2/OIDC](#calling-a-protected-api-using-oauth2oidc)
   _ [Implementing an OIDC RP and OP](#implementing-an-oidc-rp-and-op)
   _ [Adding OIDC authentication to your app](#adding-oidc-authentication-to-your-app)
@@ -166,7 +166,7 @@ We may not notice, but at this point, many OAuth2 concepts were also covered. Th
 
 OAuth 2 is an industry standard for authorization. It explains a standard way in which apps can request access to protected resources from a 3rd party on behalf of the resource owner. This is also called delegation of authorization.
 
-### OIDC is based on OAuth2
+### OIDC and OAuth2
 
 OIDC is layer on top OAuth2. The main difference between OAuth 2 and OIDC is that the former provides authorization (is the user can access a resource) while the latter provides authentication (who is the user). Thus, OAuth 2 defines the _access token_ and the _refresh token_ while OIDC adds the _ID token_ and the _userinfo_ endpoint.
 
@@ -196,7 +196,15 @@ OIDC does not have a vocabulary related to the resource server because it focuse
 
 ### Calling a protected API using OAuth2/OIDC
 
+Up until now, we have put aside the communication with any protected Rest API. This was purposely done for different reasons. The first one is to avoid addressing authentication and authorization at once. The second one is that this part is related to the authorization which is originally provided by OAuth2. Now that we have basic knowledge about OAuth2, I can suggest a common way for communicating with a protected API which is valid in both OIDC and OAuth2 worlds.
+
+Basically, a protected API requires some kind of authorization process before allowing the user to access the resource. This can be achieved in different ways, for example by sending credentials or a specific token in the request parameters. The server then checks the validity of authorization information and replies to the client back by either a success response or by an access denied response.
+
+In OAuth2/OIDC, the authorization information is the **access token**.
+
 ![Calling protected API](./assets/oauth_ressource_server.jpg)
+
+One thin
 
 ## Implementing an OIDC RP and OP
 
