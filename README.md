@@ -22,13 +22,25 @@
 
 ![Logo](assets/openid-logo-wordmark.png)
 
-Handling user authentication is common yet critical task in many apps. A frequent solution is to store the credentials in a database in a server that we own. This implies an important responsibility because there is sensible data in our servers. Another solution is to delegate authentication and authorization to a 3rd party that we communicate with using a well defined protocol. Such standards exists such as OpenID Connect and OAuth2. It is a standard protocol that. This post serves as a modest introduction to these standards with a strong focus on OpenID Connect.
+Handling user authentication is common yet critical task in many apps. This post serves as a modest introduction to the OpenID Connect standard and OAuth2.
+
+![Logo](assets/how_authenticate.png)
 
 ## Introduction
 
-OpenID Connect, abbreviated OIDC, is a standard that allows a program, an application or a website to identify a user thanks to a authentication server which can be hosted by a different developer or organization. This standard also allows to get basic authentication information.
+A frequently used solution is to store the credentials in an on-premises database. This implies an important responsibility for the maintainer of the database.
 
-OIDC does not define new protocols for every aspect of the identification. Instead, it relies on OAuth 2, which is a framework that defines how a user can get access to resources, and adds a layer that allows to identify the user and a to provide basic information about him.
+![Database solution](assets/bdd.jpg)
+
+Another solution is to delegate authentication and authorization to a 3rd party entity. We then communicate with it using a well defined protocol. Such standards exists such as OpenID Connect and OAuth2. It is a standard protocol that.
+
+![OIDC solution](assets/oidc_solution.png)
+
+## Definition
+
+OpenID Connect, abbreviated OIDC, is a standard that allows a program, an application or a website to provide login functionality through a server which can be hosted by a different developer or organization.
+
+OIDC does not define new protocols for every aspect of the authentication. Instead, it relies on OAuth 2, which is a framework that defines how a user can get access to resources, and adds a layer that allows to identify the user and a to provide basic identification information about him.
 
 > (Identity, Authentication) + OAuth 2.0 = OpenID Connect
 
