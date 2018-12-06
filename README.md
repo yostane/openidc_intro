@@ -1,40 +1,16 @@
 # Open ID Connect and OAuth 2 and for the complete beginner
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-
-<!-- code_chunk_output -->
-
-- [Open ID Connect and OAuth 2 and for the complete beginner](#open-id-connect-and-oauth-2-and-for-the-complete-beginner)
-  _ [Introduction](#introduction)
-  _ [Definition](#definition)
-  _ [Some OIDC Terminology](#some-oidc-terminology)
-  _ [Typical use case (Authorization Grant Flow)](#typical-use-case-authorization-grant-flow)
-  _ [The authorization code and tokens](#the-authorization-code-and-tokens)
-  _ [The authorization code](#the-authorization-code)
-  _ [The access token](#the-access-token)
-  _ [The refresh token](#the-refresh-token)
-  _ [The ID token](#the-id-token)
-  _ [OAuth2](#oauth2)
-  _ [OIDC and OAuth2](#oidc-and-oauth2)
-  _ [Calling a protected API using OAuth2/OIDC](#calling-a-protected-api-using-oauth2oidc)
-  _ [Implementing an OIDC RP and OP](#implementing-an-oidc-rp-and-op)
-  _ [Adding OIDC authentication to your app](#adding-oidc-authentication-to-your-app)
-  _ [Conclusion](#conclusion)
-  _ [Links](#links)
-
-<!-- /code_chunk_output -->
-
 ![Logo](assets/openid-logo-wordmark.png)
 
 Handling user authentication is common yet critical task in many apps. This post serves as a modest introduction to the OpenID Connect standard and OAuth2.
 
-![Logo](assets/how_authenticate.png)
+{% include img_cap.html img="assets/how_authenticate.png" title="" caption="How to handle authentication" %}
 
 ## Introduction
 
 A frequently used solution is to store the credentials in an on-premises database. This implies an important responsibility for the maintainer of the database.
 
-![Database solution](assets/bdd.jpg)
+![Database solution](assets/bdd.png)
 
 Another solution is to delegate authentication and authorization to a 3rd party entity. We then communicate with it using a well defined protocol. Such standards exists such as OpenID Connect and OAuth2. It is a standard protocol that.
 
@@ -60,7 +36,7 @@ Here is some OIDC terminology that will be useful for later:
 - **OpenID provider or OP**: is the 3rd party that provides authentication to a RP. Such OP are Google and Yahoo.
 - **End-user**: is the user that uses the app and enters his credentials to the OP when requested.
 
-![OIDC terms](./assets/oidc_terms.jpg)
+![OIDC terms](assets/oidc_terms.png)
 
 The next paragraphs explains a typical OIDC scenario.
 
@@ -72,7 +48,7 @@ Our use case consists of a mobile app that shows some profile information of the
 
 This use case flows as follows:
 
-![Authorization Grant Flow](./assets/grant_flow.jpg)
+![Authorization Grant Flow](assets/grant_flow.png)
 
 1. The end-user opens the app and taps the **log-in** button. The app (which is a RP in the context of OIDC) requests the OP to authenticate the end-user using an authorization request. This request contains different parameters including a **redirection URL** that is important for later use
 1. The OP shows a web-view that asks the end-user to enter his credentials. The RP does not have access to the web-view content
@@ -181,7 +157,7 @@ In terms of terminology, OAuth2 has a different vocabulary than OIDC. This may b
 - **The client application**: the application that requests authorization and protected resources on behalf of the resource owner
 - **Resource server**: the server that provides protected resources in exchange with an access token. It can either be merged with the authorization server or a totally separate entity (such as a REST API provided by the Client application developer).
 
-![OIDC + OAuth terms](./assets/oauth2_oidc_terms.jpg)
+![OIDC + OAuth terms](./assets/oauth2_oidc_terms.png)
 
 The following table tries to give an equivalence between OAuth 2 and OIDC terms:
 
@@ -202,7 +178,7 @@ Basically, a protected API requires some kind of authorization process before al
 
 In OAuth2/OIDC, the authorization information is the **access token**. The following figure illustrated calling a protected API using the access token.
 
-![Calling protected API](./assets/oauth_ressource_server.jpg)
+![Calling protected API](./assets/oauth_ressource_server.png)
 
 1. The client application authenticated the user with either OAuth2 or OIDC protocols using one of the available flows (for example the authorization grant flow that we have seen earlier)
 2. The client application sends a request to a protected API by adding the
