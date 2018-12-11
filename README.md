@@ -1,4 +1,4 @@
-﻿# Open ID Connect and OAuth 2 and for the complete beginner
+﻿# Open ID Connect and OAuth 2 for the complete beginner
 
 ![Logo](assets/openid-logo-wordmark.png)
 
