@@ -1,6 +1,7 @@
+﻿![Logo](assets/logo.png)
 ﻿# Open ID Connect and OAuth 2 for the complete beginner
 
-![Logo](assets/openid-logo-wordmark.png)
+# Open ID Connect and OAuth 2 and for the complete beginner
 
 Handling user authentication is common yet critical task in many apps. OpenID Connect and OAuth2 are standard used for that purpose. This post serves as a modest introduction to those protocols.
 
