@@ -1,7 +1,6 @@
-﻿![Logo](assets/logo.png)
 ﻿# Open ID Connect and OAuth 2 for the complete beginner
 
-# Open ID Connect and OAuth 2 and for the complete beginner
+![Logo](assets/logo.png)
 
 Handling user authentication is common yet critical task in many apps. OpenID Connect and OAuth2 are standard used for that purpose. This post serves as a modest introduction to those protocols.
 
@@ -17,7 +16,7 @@ Another solution is to delegate authentication and authorization to a 3rd party 
 
 ![OIDC solution](assets/oidc_solution.png)
 
-The next section defines OIDC and OAuth2.
+The next section defines IDC and OAuth2.
 
 ## Definition
 
